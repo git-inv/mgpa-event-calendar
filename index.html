@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Events Calendar - MGPA</title>
   <!-- Font website themandalikagp.com: Roboto -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,900&family=Roboto+Condensed:wght@700;800;900&display=swap"
-    rel="stylesheet">
+  <link href="fonts/fonts.css" rel="stylesheet">
+  <link rel="preload" href="fonts/files/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2" as="font" type="font/woff2" crossorigin>
   <style>
     :root {
       /* Palet diambil dari website MGPA */
@@ -1274,7 +1273,7 @@
   <nav>
     <div class="wrap">
       <a class="logo" href="#"><img
-          src="https://www.themandalikagp.com/storage/content/2025/05/22/1747884527_82a621adba2b63c248f3.webp"
+          src="img/circuit-aerial.webp"
           alt="MGPA - Mandalika Grand Prix Association"></a>
       <ul>
         <li>About Us</li>
@@ -1292,7 +1291,7 @@
   <!-- HERO -->
   <header class="hero">
     <img
-      src="https://awsimages.detik.net.id/community/media/visual/2025/10/05/melihat-aksi-balap-seru-motogp-di-sirkuit-internasional-pertamina-mandalika-1759657210397_169.jpeg?w=1600&q=90"
+      src="img/motogp-race-action-sm.jpg"
       alt="">
     <div class="wrap">
       <div class="eyebrow">Pertamina Mandalika International Circuit</div>
@@ -1369,7 +1368,7 @@
       <div class="xp">
         <div class="xcard">
           <div class="im"><img
-              src="https://www.themandalikagp.com/storage/content/2025/11/07/1762511123_607bf022cd097d1dfbfd.webp"
+              src="img/track-day.webp"
               alt=""></div>
           <div class="b">
             <h4>Mandalika Track Day (2 Wheels)</h4>
@@ -1379,7 +1378,7 @@
         </div>
         <div class="xcard">
           <div class="im"><img
-              src="https://www.themandalikagp.com/storage/content/2025/07/15/1752572670_e8c4264281b2e920952f.webp"
+              src="img/itcr.webp"
               alt=""></div>
           <div class="b">
             <h4>Mandalika Track Day (4 Wheels)</h4>
@@ -1388,7 +1387,7 @@
         </div>
         <div class="xcard">
           <div class="im"><img
-              src="https://www.themandalikagp.com/storage/content/2025/10/10/1760064410_25a0dd4135ca9868c04a.webp"
+              src="img/experience.webp"
               alt=""></div>
           <div class="b">
             <h4>Arrive and Drive (+Taxi Ride)</h4>
@@ -1398,7 +1397,7 @@
         </div>
         <div class="xcard">
           <div class="im"><img
-              src="https://www.themandalikagp.com/storage/content/2025/06/04/1749040404_5f45886a84878784371d.webp"
+              src="img/racing-experience.webp"
               alt=""></div>
           <div class="b">
             <h4>Racing Experience (Radical)</h4>
@@ -1446,7 +1445,7 @@
       <div class="fgrid">
         <div>
           <img class="flogo"
-            src="https://www.themandalikagp.com/storage/content/2025/05/22/1747884527_82a621adba2b63c248f3.webp"
+            src="img/circuit-aerial.webp"
             alt="MGPA">
           <div class="fcontact"><span>✉ corsec@themandalikagp.com</span><span>☏ <u>+6282125596792</u></span></div>
           <div class="soc"><span>IG</span><span>f</span><span>▶</span><span>♪</span><span>in</span></div>
@@ -1503,19 +1502,19 @@
   <script>
     /* ---------- FOTO (aset website MGPA) ---------- */
     const P = {
-      motogp: 'https://awsimages.detik.net.id/community/media/visual/2025/10/05/melihat-aksi-balap-seru-motogp-di-sirkuit-internasional-pertamina-mandalika-1759657210397_169.jpeg?w=1200&q=90',
-      motogp2: 'https://awsimages.detik.net.id/community/media/visual/2025/10/05/suasana-final-race-motogp-mandalika-2025-di-sirkuit-mandalika-lombok-tengah-minggu-5102025-foto-nathea-citradetikbali-1759651542605_169.jpeg?w=1200&q=90',
-      mfos: 'https://cdn.themandalikagp.com/storage/content/2026/06/13/1781335285_c71ee7287efa0eb60601.webp?v=1',
-      mfos2: 'https://www.themandalikagp.com/storage/content/2025/07/20/1752983406_0eb958cc6a0a33b5a7c4.webp',
-      itcr: 'https://www.themandalikagp.com/storage/content/2025/07/15/1752572670_e8c4264281b2e920952f.webp',
-      paddock: 'https://www.themandalikagp.com/storage/content/2025/07/15/1752555307_ed13d6cc084415903953.webp',
-      td: 'https://www.themandalikagp.com/storage/content/2025/11/07/1762511123_607bf022cd097d1dfbfd.webp',
-      td2: 'https://cdn.themandalikagp.com/storage/content/2026/01/15/1768490973_fc2eec0995f30fb50078.webp?v=1768490975',
-      tdcom: 'https://jahada.themandalikagp.com/storage/content/2025/05/18/1747581655_22ddfae5e2c21420304f.webp',
-      radical: 'https://www.themandalikagp.com/storage/content/2025/06/04/1749040404_5f45886a84878784371d.webp',
-      radical2: 'https://www.themandalikagp.com/storage/content/2025/06/25/1750869124_838c61061d93ef26ab7c.webp',
-      ad: 'https://www.themandalikagp.com/storage/content/2025/10/10/1760064410_25a0dd4135ca9868c04a.webp',
-      ops: 'https://www.themandalikagp.com/storage/content/2025/05/27/1748349323_41b1b821eeecacd47aa6.webp'
+      motogp: 'img/motogp-race-action.jpg',
+      motogp2: 'img/motogp-final-race.jpg',
+      mfos: 'img/mfos.webp',
+      mfos2: 'img/mfos-alt.webp',
+      itcr: 'img/itcr.webp',
+      paddock: 'img/paddock.webp',
+      td: 'img/track-day.webp',
+      td2: 'img/track-day-alt.webp',
+      tdcom: 'img/track-day-community.webp',
+      radical: 'img/racing-experience.webp',
+      radical2: 'img/racing-experience-alt.webp',
+      ad: 'img/experience.webp',
+      ops: 'img/circuit-ops.webp'
     };
     const CAT = {
       gp: { l: 'MotoGP™', c: 'c-gp', e: 'e-gp', col: 'var(--mgpa-red)' },
