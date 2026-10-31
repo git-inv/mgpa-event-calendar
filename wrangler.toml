@@ -1,5 +1,0 @@
-name = "mgpa-event-calendar"
-pages_build_output_dir = "."
-
-# Static single-file mockup — tidak ada build step.
-# Semua asset (gambar & font) sudah divendor ke repo, nol dependency eksternal.
