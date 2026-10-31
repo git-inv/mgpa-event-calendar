@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events Calendar - MGPA</title>
+  <!-- Font website themandalikagp.com: Roboto -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,900&family=Roboto+Condensed:wght@700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      /* Palet diambil dari website MGPA */
+      --mgpa-red: #DC3545;
+      /* tombol LIVE STREAMING */
+      --mgpa-red-nav: #FF0000;
+      /* menu aktif */
+      --ribbon-red: #EB3225;
+      --ribbon-yellow: #F8D349;
+      --ribbon-blue: #365AA2;
+      --ribbon-gray: #A6A694;
+      --black: #000;
+      --ink: #1A1A1A;
+      --muted: #6C757D;
+      --line: #E5E5E5;
+      --bg: #F4F4F4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      font-family: Roboto, Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+      -webkit-font-smoothing: antialiased
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none
+    }
+
+    img {
+      display: block;
+      max-width: 100%
+    }
+
+    .wrap {
+      max-width: 1110px;
+      margin: 0 auto;
+      padding: 0 20px
+    }
+
+    .cond {
+      font-family: 'Roboto Condensed', Roboto, sans-serif
+    }
+
+    .note {
+      background: #111;
+      color: #bbb;
+      text-align: center;
+      font-size: 11px;
+      padding: 6px;
+      letter-spacing: .5px
+    }
+
+    /* ===== NAVBAR (sama seperti website) ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .06)
+    }
+
+    nav .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px
+    }
+
+    nav .logo img {
+      height: 30px
+    }
+
+    nav ul {
+      display: flex;
+      gap: 46px;
+      list-style: none;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase
+    }
+
+    nav ul li.active {
+      color: var(--mgpa-red-nav)
+    }
+
+    .btn-live {
+      background: var(--mgpa-red);
+      color: #fff;
+      padding: 9px 26px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 500px;
+      color: #fff;
+      overflow: hidden;
+      background: #111
+    }
+
+    .hero>img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0, 0, 0, .88) 0%, rgba(0, 0, 0, .55) 45%, rgba(0, 0, 0, .1) 100%)
+    }
+
+    .hero .wrap {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--ribbon-yellow);
+      margin-bottom: 12px
+    }
+
+    .hero h1 {
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      font-size: 92px;
+      line-height: .88;
+      text-transform: uppercase;
+      margin-bottom: 18px
+    }
+
+    .hero h1 span {
+      color: var(--mgpa-red)
+    }
+
+    .hero p {
+      max-width: 470px;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #ddd;
+      margin-bottom: 28px;
+      font-weight: 300
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 5px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: .2s;
+      cursor: pointer;
+      border: 0
+    }
+
+    .btn-red {
+      background: var(--mgpa-red);
+      color: #fff
+    }
+
+    .btn-red:hover {
+      background: #b92b39
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(255, 255, 255, .7);
+      color: #fff;
+      margin-left: 8px
+    }
+
+    .btn-ghost:hover {
+      background: #fff;
+      color: #000
+    }
+
+    .btn-dark {
+      background: #000;
+      color: #fff
+    }
+
+    .btn-outline {
+      border: 1px solid #000;
+      color: #000;
+      background: #fff
+    }
+
+    .btn-outline:hover {
+      background: #000;
+      color: #fff
+    }
+
+    /* Next-event ticker di hero */
+    .ticker {
+      position: absolute;
+      right: 20px;
+      bottom: 30px;
+      z-index: 3;
+      background: rgba(255, 255, 255, .96);
+      color: #000;
+      border-radius: 8px;
+      display: flex;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .3)
+    }
+
+    .ticker .d {
+      background: var(--mgpa-red);
+      color: #fff;
+      padding: 14px 18px;
+      text-align: center
+    }
+
+    .ticker .d b {
+      display: block;
+      font-family: 'Roboto Condensed';
+      font-size: 34px;
+      line-height: 1
+    }
+
+    .ticker .d small {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px
+    }
+
+    .ticker .t {
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center
+    }
+
+    .ticker .t small {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--mgpa-red);
+      text-transform: uppercase
+    }
+
+    .ticker .t b {
+      font-size: 15px;
+      margin: 3px 0
+    }
+
+    .ticker .t span {
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    .live-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--mgpa-red);
+      margin-right: 6px;
+      animation: pulse 1.2s infinite
+    }
+
+    /* ===== RIBBON (strip warna khas website) ===== */
+    .ribbon {
+      height: 24px;
+      background: linear-gradient(100deg,
+          var(--ribbon-red) 0 10%, var(--ribbon-yellow) 10% 21%, var(--ribbon-gray) 21% 26%, var(--ribbon-yellow) 26% 38%,
+          var(--ribbon-gray) 38% 47%, var(--ribbon-red) 47% 56%, var(--ribbon-blue) 56% 70%, var(--ribbon-yellow) 70% 79%,
+          var(--ribbon-red) 79% 90%, var(--ribbon-blue) 90%)
+    }
+
+    .ribbon.thin {
+      height: 8px
+    }
+
+    /* ===== SECTION HEAD ===== */
+    section {
+      padding: 80px 0
+    }
+
+    .sh {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 34px
+    }
+
+    .sh small {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--mgpa-red);
+      text-transform: uppercase;
+      margin-bottom: 8px
+    }
+
+    .sh h2 {
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      font-size: 46px;
+      line-height: 1;
+      text-transform: uppercase
+    }
+
+    .sh p {
+      color: var(--muted);
+      font-size: 14px;
+      max-width: 420px;
+      line-height: 1.6
+    }
+
+    .more-link {
+      color: var(--mgpa-red);
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap
+    }
+
+    /* ===== STATS ===== */
+    .stats {
+      background: #000;
+      color: #fff;
+      padding: 0
+    }
+
+    .stats .wrap {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr)
+    }
+
+    .stat {
+      padding: 34px 26px;
+      border-right: 1px solid #222
+    }
+
+    .stat:last-child {
+      border-right: 0
+    }
+
+    .stat b {
+      display: block;
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      font-size: 42px;
+      line-height: 1
+    }
+
+    .stat b em {
+      font-style: normal;
+      color: var(--mgpa-red)
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #999;
+      text-transform: uppercase;
+      font-weight: 500
+    }
+
+    /* ===== HIGHLIGHT ===== */
+    .hl {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      grid-template-rows: 240px 240px;
+      gap: 18px
+    }
+
+    .hcard {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      color: #fff;
+      cursor: pointer;
+      background: #222
+    }
+
+    .hcard.big {
+      grid-row: span 2
+    }
+
+    .hcard img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .6s
+    }
+
+    .hcard:hover img {
+      transform: scale(1.06)
+    }
+
+    .hcard::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 35%, rgba(0, 0, 0, .92))
+    }
+
+    .hcard .badge-date {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      background: #fff;
+      color: #000;
+      border-radius: 6px;
+      padding: 8px 12px;
+      text-align: center;
+      min-width: 62px
+    }
+
+    .badge-date b {
+      display: block;
+      font-family: 'Roboto Condensed';
+      font-size: 26px;
+      line-height: 1
+    }
+
+    .badge-date small {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--mgpa-red)
+    }
+
+    .hcard .info {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 20px;
+      z-index: 2
+    }
+
+    .hcard h3 {
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      font-size: 24px;
+      line-height: 1.05;
+      margin: 8px 0 6px
+    }
+
+    .hcard.big h3 {
+      font-size: 38px
+    }
+
+    .hcard p {
+      font-size: 13px;
+      color: #ccc;
+      line-height: 1.5
+    }
+
+    .hcard .fact {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ribbon-yellow)
+    }
+
+    /* Tag kategori */
+    .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 3px;
+      text-transform: uppercase
+    }
+
+    .c-gp {
+      background: var(--mgpa-red);
+      color: #fff
+    }
+
+    .c-race {
+      background: var(--ribbon-blue);
+      color: #fff
+    }
+
+    .c-exp {
+      background: var(--ribbon-yellow);
+      color: #000
+    }
+
+    .c-track {
+      background: #000;
+      color: #fff;
+      border: 1px solid #444
+    }
+
+    .c-ops {
+      background: var(--ribbon-gray);
+      color: #fff
+    }
+
+    /* ===== EXPLORE ===== */
+    .explore {
+      background: var(--bg)
+    }
+
+    .toolbar {
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .04)
+    }
+
+    .filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .chip {
+      border: 1px solid #D5D5D5;
+      background: #fff;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font: 700 11px Roboto;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: .15s;
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .chip i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block
+    }
+
+    .chip:hover {
+      border-color: #000
+    }
+
+    .chip.on {
+      background: #000;
+      color: #fff;
+      border-color: #000
+    }
+
+    .month {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .month b {
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      font-size: 22px;
+      text-transform: uppercase;
+      min-width: 170px;
+      text-align: center
+    }
+
+    .arw {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #D5D5D5;
+      background: #fff;
+      cursor: pointer;
+      font-size: 15px
+    }
+
+    .arw:hover {
+      background: #000;
+      color: #fff
+    }
+
+    .toggle {
+      display: flex;
+      border: 1px solid #D5D5D5;
+      border-radius: 6px;
+      overflow: hidden
+    }
+
+    .toggle button {
+      border: 0;
+      background: #fff;
+      padding: 8px 14px;
+      font: 700 11px Roboto;
+      letter-spacing: .8px;
+      cursor: pointer
+    }
+
+    .toggle button.on {
+      background: var(--mgpa-red);
+      color: #fff
+    }
+
+    .count {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 14px 2px
+    }
+
+    /* list */
+    .week {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin: 26px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .week::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #DADADA
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 86px 180px 1fr auto;
+      gap: 22px;
+      align-items: center;
+      background: #fff;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 10px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: .2s
+    }
+
+    .row:hover {
+      border-color: var(--mgpa-red);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, .07)
+    }
+
+    .row.past {
+      opacity: .82
+    }
+
+    .rd {
+      text-align: center;
+      border-right: 1px solid var(--line);
+      padding-right: 10px
+    }
+
+    .rd small {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--muted)
+    }
+
+    .rd b {
+      display: block;
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-size: 40px;
+      line-height: 1
+    }
+
+    .rd em {
+      font-style: normal;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--mgpa-red);
+      letter-spacing: 2px
+    }
+
+    .ri {
+      height: 100px;
+      border-radius: 7px;
+      overflow: hidden;
+      background: #ddd
+    }
+
+    .ri img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .rt h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 7px 0 6px;
+      line-height: 1.25
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .status {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 3px;
+      margin-left: 6px;
+      vertical-align: middle
+    }
+
+    .s-done {
+      background: #EEE;
+      color: #777
+    }
+
+    .s-today {
+      background: #FDE2E4;
+      color: var(--mgpa-red)
+    }
+
+    .go {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: grid;
+      place-items: center;
+      transition: .2s;
+      font-size: 16px
+    }
+
+    .row:hover .go {
+      background: var(--mgpa-red);
+      color: #fff
+    }
+
+    /* calendar */
+    .cal {
+      display: none;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr)
+    }
+
+    .dh {
+      padding: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--muted);
+      background: #FAFAFA;
+      border-bottom: 1px solid var(--line);
+      text-transform: uppercase
+    }
+
+    .cell {
+      min-height: 118px;
+      padding: 8px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line)
+    }
+
+    .cell:nth-child(7n) {
+      border-right: 0
+    }
+
+    .cell .n {
+      display: inline-grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .cell.out {
+      background: #FCFCFC
+    }
+
+    .cell.out .n {
+      color: #C8C8C8
+    }
+
+    .cell.today {
+      background: #FFF7F7
+    }
+
+    .cell.today .n {
+      background: var(--mgpa-red);
+      color: #fff
+    }
+
+    .ev {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 7px;
+      border-radius: 3px;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      border-left: 3px solid
+    }
+
+    .ev:hover {
+      filter: brightness(.95)
+    }
+
+    .e-gp {
+      background: #FBE3E5;
+      border-color: var(--mgpa-red)
+    }
+
+    .e-race {
+      background: #E3E9F5;
+      border-color: var(--ribbon-blue)
+    }
+
+    .e-exp {
+      background: #FEF6D6;
+      border-color: #E2B800
+    }
+
+    .e-track {
+      background: #ECECEC;
+      border-color: #000
+    }
+
+    .e-ops {
+      background: #F1F1EC;
+      border-color: var(--ribbon-gray);
+      color: #666
+    }
+
+    .plus {
+      font-size: 11px;
+      color: var(--muted);
+      padding-left: 4px;
+      cursor: pointer
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      padding: 14px 18px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--line)
+    }
+
+    .legend i {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 6px;
+      vertical-align: -1px
+    }
+
+    /* ===== EXPERIENCES ===== */
+    .xp {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px
+    }
+
+    .xcard {
+      border-radius: 10px;
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid var(--line);
+      transition: .25s
+    }
+
+    .xcard:hover {
+      box-shadow: 0 14px 30px rgba(0, 0, 0, .08);
+      transform: translateY(-3px)
+    }
+
+    .xcard .im {
+      height: 160px;
+      overflow: hidden
+    }
+
+    .xcard img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .xcard .b {
+      padding: 18px
+    }
+
+    .xcard h4 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      min-height: 36px
+    }
+
+    .xcard p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 14px
+    }
+
+    /* ===== PLAN ===== */
+    .plan {
+      background: #000;
+      color: #fff;
+      position: relative;
+      overflow: hidden
+    }
+
+    .plan .grid3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px
+    }
+
+    .pc {
+      border: 1px solid #2A2A2A;
+      border-radius: 10px;
+      padding: 28px;
+      transition: .25s;
+      background: #0B0B0B
+    }
+
+    .pc:hover {
+      border-color: var(--mgpa-red)
+    }
+
+    .pc .ic {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--mgpa-red);
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px
+    }
+
+    .pc h4 {
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      font-size: 24px;
+      text-transform: uppercase;
+      margin-bottom: 8px
+    }
+
+    .pc p {
+      font-size: 14px;
+      color: #9A9A9A;
+      line-height: 1.6;
+      margin-bottom: 16px
+    }
+
+    .pc a {
+      color: var(--ribbon-yellow);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase
+    }
+
+    .plan .sh h2 {
+      color: #fff
+    }
+
+    .plan .sh p {
+      color: #999
+    }
+
+    /* ===== FOOTER (mengikuti website) ===== */
+    footer {
+      background: #000;
+      color: #fff;
+      padding: 56px 0 0
+    }
+
+    .fgrid {
+      display: grid;
+      grid-template-columns: 2.3fr 1fr 1fr 1fr;
+      gap: 30px
+    }
+
+    footer .flogo {
+      height: 34px;
+      filter: brightness(0) invert(1);
+      margin-bottom: 24px
+    }
+
+    .fcontact {
+      display: flex;
+      gap: 70px;
+      font-size: 13px;
+      margin-bottom: 22px
+    }
+
+    .soc {
+      display: flex;
+      gap: 14px
+    }
+
+    .soc span {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #fff;
+      color: #000;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900
+    }
+
+    footer h5 {
+      font-size: 11px;
+      letter-spacing: 4px;
+      font-weight: 700;
+      margin-bottom: 20px
+    }
+
+    footer ul {
+      list-style: none
+    }
+
+    footer li {
+      font-size: 13px;
+      color: #9A9A9A;
+      margin-bottom: 12px;
+      line-height: 1.3
+    }
+
+    .copy {
+      text-align: right;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #bbb;
+      padding: 40px 0 26px
+    }
+
+    .pattern {
+      height: 46px;
+      background-color: #000;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='46'%3E%3Cpath d='M4 12h44v10H12v10h44M56 12h44v10H64v10h40' fill='none' stroke='%23262626' stroke-width='3'/%3E%3C/svg%3E")
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .65);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99;
+      padding: 20px
+    }
+
+    .modal.show {
+      display: flex
+    }
+
+    .mbox {
+      background: #fff;
+      border-radius: 12px;
+      width: 620px;
+      max-width: 100%;
+      overflow: hidden;
+      max-height: 92vh;
+      overflow-y: auto
+    }
+
+    .mimg {
+      height: 250px;
+      position: relative
+    }
+
+    .mimg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover
+    }
+
+    .x {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #fff;
+      border: 0;
+      font-size: 20px;
+      cursor: pointer
+    }
+
+    .mb {
+      padding: 26px
+    }
+
+    .mb h3 {
+      font-family: 'Roboto Condensed';
+      font-weight: 900;
+      font-style: italic;
+      font-size: 32px;
+      text-transform: uppercase;
+      line-height: 1.05;
+      margin: 10px 0 14px
+    }
+
+    .mb .meta {
+      margin-bottom: 14px;
+      font-size: 13px
+    }
+
+    .mb p {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.65;
+      margin-bottom: 20px
+    }
+
+    @media(max-width:960px) {
+      nav ul {
+        display: none
+      }
+
+      .hero h1 {
+        font-size: 60px
+      }
+
+      .ticker {
+        display: none
+      }
+
+      .hl {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto
+      }
+
+      .hcard {
+        height: 260px
+      }
+
+      .hcard.big {
+        grid-row: auto;
+        height: 340px
+      }
+
+      .stats .wrap,
+      .xp {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .plan .grid3,
+      .fgrid {
+        grid-template-columns: 1fr
+      }
+
+      .row {
+        grid-template-columns: 70px 1fr auto
+      }
+
+      .ri {
+        display: none
+      }
+
+      .sh {
+        flex-direction: column;
+        align-items: flex-start
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="note">MOCKUP v2 · Redesign halaman Events Calendar · themandalikagp.com</div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="wrap">
+      <a class="logo" href="#"><img
+          src="https://www.themandalikagp.com/storage/content/2025/05/22/1747884527_82a621adba2b63c248f3.webp"
+          alt="MGPA - Mandalika Grand Prix Association"></a>
+      <ul>
+        <li>About Us</li>
+        <li>MotoGP™</li>
+        <li>Plan Your Visit</li>
+        <li class="active">Events Calendar</li>
+        <li>Venue Rent</li>
+        <li>Merchandise</li>
+        <li>News</li>
+      </ul>
+      <a class="btn-live" href="#">Live Streaming</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <img
+      src="https://awsimages.detik.net.id/community/media/visual/2025/10/05/melihat-aksi-balap-seru-motogp-di-sirkuit-internasional-pertamina-mandalika-1759657210397_169.jpeg?w=1600&q=90"
+      alt="">
+    <div class="wrap">
+      <div class="eyebrow">Pertamina Mandalika International Circuit</div>
+      <h1>Events<br><span>Calendar</span></h1>
+      <p>Dari MotoGP™, Mandalika Festival of Speed, hingga track day dan racing experience, semua agenda di sirkuit ada
+        di sini.</p>
+      <div><a class="btn btn-red" href="#explore">Lihat Jadwal ↓</a><a class="btn btn-ghost" href="#plan">Plan Your
+          Visit</a></div>
+    </div>
+    <div class="ticker">
+      <div class="d"><b>31</b><small>OKT</small></div>
+      <div class="t"><small><span class="live-dot"></span>Hari Ini di Sirkuit</small><b>Track Day R2 Community
+          250cc</b><span>09:00 – 17:00 WITA · Mandalika Track Day</span></div>
+    </div>
+  </header>
+  <div class="ribbon"></div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="wrap">
+      <div class="stat"><b>157.875</b><span>Penonton MotoGP™ 2026</span></div>
+      <div class="stat"><b>Rp5,2<em>T</em></b><span>Dampak ekonomi MotoGP™ 2026</span></div>
+      <div class="stat"><b>143</b><span>Pembalap MFoS Round 4</span></div>
+      <div class="stat"><b>4,31<em>km</em></b><span>17 tikungan · lintasan sirkuit</span></div>
+    </div>
+  </div>
+
+  <!-- HIGHLIGHTS -->
+  <section>
+    <div class="wrap">
+      <div class="sh">
+        <div><small>Highlights Oktober 2026</small>
+          <h2>Bulan Paling Sibuk<br>di Mandalika</h2>
+        </div>
+        <a class="more-link" href="#">Lihat semua berita →</a>
+      </div>
+      <div class="hl" id="hl"></div>
+    </div>
+  </section>
+
+  <!-- EXPLORE -->
+  <section class="explore" id="explore">
+    <div class="wrap">
+      <div class="sh">
+        <div><small>Jadwal Lengkap</small>
+          <h2>Agenda Sirkuit</h2>
+        </div>
+        <p>Filter berdasarkan kategori, lalu pilih tampilan daftar atau kalender bulanan.</p>
+      </div>
+      <div class="toolbar">
+        <div class="filters" id="filters"></div>
+        <div class="month"><button class="arw" id="prev">‹</button><b id="mlabel">Oktober 2026</b><button class="arw"
+            id="next">›</button></div>
+        <div class="toggle"><button class="on" id="vList">☰ DAFTAR</button><button id="vCal">▦ KALENDER</button></div>
+      </div>
+      <div class="count" id="count"></div>
+      <div id="list"></div>
+      <div class="cal" id="cal">
+        <div class="grid" id="grid"></div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCES -->
+  <section>
+    <div class="wrap">
+      <div class="sh">
+        <div><small>Mandalika Xperiences</small>
+          <h2>Feel the Thrill<br>of the Circuit</h2>
+        </div>
+        <a class="more-link" href="#">Semua experience →</a>
+      </div>
+      <div class="xp">
+        <div class="xcard">
+          <div class="im"><img
+              src="https://www.themandalikagp.com/storage/content/2025/11/07/1762511123_607bf022cd097d1dfbfd.webp"
+              alt=""></div>
+          <div class="b">
+            <h4>Mandalika Track Day (2 Wheels)</h4>
+            <p>Taklukkan 17 tikungan sirkuit MotoGP™ dengan motor Anda.</p><a class="btn btn-outline" href="#">Book
+              Now</a>
+          </div>
+        </div>
+        <div class="xcard">
+          <div class="im"><img
+              src="https://www.themandalikagp.com/storage/content/2025/07/15/1752572670_e8c4264281b2e920952f.webp"
+              alt=""></div>
+          <div class="b">
+            <h4>Mandalika Track Day (4 Wheels)</h4>
+            <p>Sesi track day untuk mobil di lintasan kelas dunia.</p><a class="btn btn-outline" href="#">Book Now</a>
+          </div>
+        </div>
+        <div class="xcard">
+          <div class="im"><img
+              src="https://www.themandalikagp.com/storage/content/2025/10/10/1760064410_25a0dd4135ca9868c04a.webp"
+              alt=""></div>
+          <div class="b">
+            <h4>Arrive and Drive (+Taxi Ride)</h4>
+            <p>Datang, kemudikan, atau duduk di samping driver profesional.</p><a class="btn btn-outline" href="#">Book
+              Now</a>
+          </div>
+        </div>
+        <div class="xcard">
+          <div class="im"><img
+              src="https://www.themandalikagp.com/storage/content/2025/06/04/1749040404_5f45886a84878784371d.webp"
+              alt=""></div>
+          <div class="b">
+            <h4>Racing Experience (Radical)</h4>
+            <p>Rasakan mobil balap Radical SR series di Mandalika.</p><a class="btn btn-outline" href="#">Book Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAN YOUR VISIT -->
+  <section class="plan" id="plan">
+    <div class="wrap">
+      <div class="sh">
+        <div><small>Datang ke Mandalika?</small>
+          <h2>Plan Your Visit</h2>
+        </div>
+        <p>Semua yang perlu Anda ketahui sebelum berangkat ke sirkuit.</p>
+      </div>
+      <div class="grid3">
+        <div class="pc">
+          <div class="ic">✈</div>
+          <h4>Getting Here</h4>
+          <p>±30 menit dari Bandara Internasional Lombok (BIZAM) menuju sirkuit.</p><a href="#">Lihat rute →</a>
+        </div>
+        <div class="pc">
+          <div class="ic">🏁</div>
+          <h4>Circuit Map</h4>
+          <p>Gate, grandstand, area parkir, shuttle, dan fasilitas pengunjung.</p><a href="#">Buka peta →</a>
+        </div>
+        <div class="pc">
+          <div class="ic">🏟</div>
+          <h4>Venue Rent</h4>
+          <p>Royal Box, Royal Hall 1, Deluxe, Observation Deck, dan Wonderful Indonesia Hills.</p><a href="#">Sewa venue
+            →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="ribbon"></div>
+  <footer>
+    <div class="wrap">
+      <div class="fgrid">
+        <div>
+          <img class="flogo"
+            src="https://www.themandalikagp.com/storage/content/2025/05/22/1747884527_82a621adba2b63c248f3.webp"
+            alt="MGPA">
+          <div class="fcontact"><span>✉ corsec@themandalikagp.com</span><span>☏ <u>+6282125596792</u></span></div>
+          <div class="soc"><span>IG</span><span>f</span><span>▶</span><span>♪</span><span>in</span></div>
+        </div>
+        <div>
+          <h5>GP SERIES</h5>
+          <ul>
+            <li>MotoGP™ Indonesia</li>
+            <li>FIM Asia Road Racing Championship</li>
+            <li>Porsche Sprint Challenge Indonesia</li>
+            <li>Mandalika Racing Series</li>
+            <li>Mandalika Festival of Speed</li>
+          </ul>
+        </div>
+        <div>
+          <h5>EXPERIENCES</h5>
+          <ul>
+            <li>MANDALIKA TRACK DAY (2 WHEELS)</li>
+            <li>MANDALIKA TRACK DAY (4 WHEELS)</li>
+            <li>LAMPAQ AT CIRCUIT</li>
+            <li>MANDALIKA ARRIVE AND DRIVE (+TAXI RIDE)</li>
+            <li>MANDALIKA RACING EXPERIENCE (RADICAL)</li>
+          </ul>
+        </div>
+        <div>
+          <h5>VENUE RENT</h5>
+          <ul>
+            <li>Wonderful Indonesia Hills Mandalika</li>
+            <li>Royal Box</li>
+            <li>Royal Hall 1</li>
+            <li>Deluxe</li>
+            <li>Observation Deck</li>
+          </ul>
+        </div>
+      </div>
+      <div class="copy">© Mandalika GP Association. All right reserved</div>
+    </div>
+    <div class="pattern"></div>
+  </footer>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="mbox">
+      <div class="mimg"><img id="mImg" src="" alt=""><button class="x" onclick="closeM()">×</button></div>
+      <div class="mb"><span class="tag" id="mTag"></span>
+        <h3 id="mTitle"></h3>
+        <div class="meta" id="mMeta"></div>
+        <p id="mDesc"></p>
+        <a class="btn btn-red" href="#" id="mCta">Detail Event</a> <a class="btn btn-outline" href="#">Petunjuk Arah</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- FOTO (aset website MGPA) ---------- */
+    const P = {
+      motogp: 'https://awsimages.detik.net.id/community/media/visual/2025/10/05/melihat-aksi-balap-seru-motogp-di-sirkuit-internasional-pertamina-mandalika-1759657210397_169.jpeg?w=1200&q=90',
+      motogp2: 'https://awsimages.detik.net.id/community/media/visual/2025/10/05/suasana-final-race-motogp-mandalika-2025-di-sirkuit-mandalika-lombok-tengah-minggu-5102025-foto-nathea-citradetikbali-1759651542605_169.jpeg?w=1200&q=90',
+      mfos: 'https://cdn.themandalikagp.com/storage/content/2026/06/13/1781335285_c71ee7287efa0eb60601.webp?v=1',
+      mfos2: 'https://www.themandalikagp.com/storage/content/2025/07/20/1752983406_0eb958cc6a0a33b5a7c4.webp',
+      itcr: 'https://www.themandalikagp.com/storage/content/2025/07/15/1752572670_e8c4264281b2e920952f.webp',
+      paddock: 'https://www.themandalikagp.com/storage/content/2025/07/15/1752555307_ed13d6cc084415903953.webp',
+      td: 'https://www.themandalikagp.com/storage/content/2025/11/07/1762511123_607bf022cd097d1dfbfd.webp',
+      td2: 'https://cdn.themandalikagp.com/storage/content/2026/01/15/1768490973_fc2eec0995f30fb50078.webp?v=1768490975',
+      tdcom: 'https://jahada.themandalikagp.com/storage/content/2025/05/18/1747581655_22ddfae5e2c21420304f.webp',
+      radical: 'https://www.themandalikagp.com/storage/content/2025/06/04/1749040404_5f45886a84878784371d.webp',
+      radical2: 'https://www.themandalikagp.com/storage/content/2025/06/25/1750869124_838c61061d93ef26ab7c.webp',
+      ad: 'https://www.themandalikagp.com/storage/content/2025/10/10/1760064410_25a0dd4135ca9868c04a.webp',
+      ops: 'https://www.themandalikagp.com/storage/content/2025/05/27/1748349323_41b1b821eeecacd47aa6.webp'
+    };
+    const CAT = {
+      gp: { l: 'MotoGP™', c: 'c-gp', e: 'e-gp', col: 'var(--mgpa-red)' },
+      race: { l: 'Kejuaraan', c: 'c-race', e: 'e-race', col: 'var(--ribbon-blue)' },
+      track: { l: 'Track Day', c: 'c-track', e: 'e-track', col: '#000' },
+      exp: { l: 'Experience', c: 'c-exp', e: 'e-exp', col: '#E2B800' },
+      ops: { l: 'Persiapan Sirkuit', c: 'c-ops', e: 'e-ops', col: 'var(--ribbon-gray)' }
+    };
+    /* ---------- DATA OKTOBER 2026 (dari kalender Event MGPA) ---------- */
+    const E = [
+      { s: '2026-09-28', e: '2026-09-30', t: 'Track Closed for Maintenance – MotoGP 2026 Preparation', c: 'ops', img: P.ops, d: 'Lintasan ditutup untuk perawatan dan persiapan Pertamina Grand Prix of Indonesia 2026.' },
+      { s: '2026-09-28', e: '2026-10-08', t: 'Persiapan MotoGP™ 2026', c: 'ops', img: P.paddock, d: 'Rangkaian persiapan infrastruktur dan operasional menuju MotoGP™ 2026.' },
+      { s: '2026-10-09', e: '2026-10-11', t: 'Pertamina Grand Prix of Indonesia 2026', c: 'gp', img: P.motogp, f: 1, fact: '157.875 penonton · Pemenang: Marco Bezzecchi', d: 'Seri MotoGP™ Indonesia 2026 mencatat rekor 157.875 penonton, naik 12,5% dari 2025, dengan dampak ekonomi mencapai Rp5,2 triliun. Marco Bezzecchi (Aprilia Racing) memenangi balapan utama.' },
+      { s: '2026-10-12', e: '2026-10-13', t: 'Unloading MotoGP™', c: 'ops', img: P.motogp2, d: 'Proses pembongkaran logistik dan freight pasca-event MotoGP™.' },
+      { s: '2026-10-13', e: '2026-10-13', t: 'Persiapan MFoS', c: 'ops', img: P.paddock, d: 'Persiapan Mandalika Festival of Speed putaran keempat.' },
+      { s: '2026-10-14', e: '2026-10-15', t: 'Open Practice ITCR', c: 'race', img: P.itcr, d: 'Sesi latihan terbuka pembalap Indonesia Touring Car Race menjelang MFoS Round 4.' },
+      { s: '2026-10-16', e: '2026-10-18', t: 'Mandalika Festival of Speed (MFoS) #4', c: 'race', img: P.mfos, f: 1, fact: '143 pembalap · 6 kejuaraan', d: 'Putaran keempat sekaligus penutup MFoS 2026 diikuti 143 pembalap di kelas Kejurnas ITCR 1200, ITCR 1500, ISTCR 3600, Agya OMR, Subaru BRZ Super Series, dan Superstars Sportscars Series.' },
+      { s: '2026-10-19', e: '2026-10-19', t: 'Mandalika Track Experience', c: 'exp', img: P.ad, d: 'Program track experience untuk umum di Pertamina Mandalika International Circuit.' },
+      { s: '2026-10-19', e: '2026-10-19', t: 'Arrive & Drive Formula', c: 'exp', img: P.radical2, d: 'Rasakan mengemudikan mobil formula di lintasan dengan pendampingan instruktur.' },
+      { s: '2026-10-20', e: '2026-10-21', t: 'Track Day R2', c: 'track', img: P.td, d: 'Sesi track day kendaraan roda dua.' },
+      { s: '2026-10-22', e: '2026-10-22', t: 'Track Experience Mandalika', c: 'exp', img: P.ad, d: 'Sesi track experience untuk umum.' },
+      { s: '2026-10-23', e: '2026-10-23', t: 'Private Track Session', c: 'track', img: P.td2, d: 'Sesi privat penggunaan lintasan.' },
+      { s: '2026-10-24', e: '2026-10-25', t: 'Track Day R2', c: 'track', img: P.td2, f: 1, fact: 'Weekend track day', d: 'Akhir pekan track day kendaraan roda dua untuk komunitas dan individu.' },
+      { s: '2026-10-27', e: '2026-10-28', t: 'Private Track Day R4', c: 'track', img: P.itcr, d: 'Sesi privat track day kendaraan roda empat.' },
+      { s: '2026-10-29', e: '2026-10-30', t: 'Track Day R4', c: 'track', img: P.mfos2, d: 'Sesi track day kendaraan roda empat.' },
+      { s: '2026-10-29', e: '2026-10-29', t: 'Radical Experience', c: 'exp', img: P.radical, d: 'Mandalika Racing Experience bersama mobil balap Radical.' },
+      { s: '2026-10-30', e: '2026-10-30', t: 'Track Walk', c: 'exp', img: P.tdcom, d: 'Menyusuri lintasan sirkuit secara langsung.' },
+      { s: '2026-10-31', e: '2026-10-31', t: 'Track Day R2 Community 250cc', c: 'track', img: P.tdcom, time: '09:00 – 17:00 WITA', d: 'Track day komunitas motor 250cc, berlangsung hari ini.' }
+    ];
+    const TODAY = new Date('2026-10-31');
+    const MON = ['JAN', 'FEB', 'MAR', 'APR', 'MEI', 'JUN', 'JUL', 'AGU', 'SEP', 'OKT', 'NOV', 'DES'];
+    const MONF = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    const DAY = ['MIN', 'SEN', 'SEL', 'RAB', 'KAM', 'JUM', 'SAB'];
+    const D = s => new Date(s);
+    const fmt = e => { const a = D(e.s), b = D(e.e); return e.s === e.e ? `${a.getDate()} ${MONF[a.getMonth()]} 2026` : a.getMonth() === b.getMonth() ? `${a.getDate()}–${b.getDate()} ${MONF[b.getMonth()]} 2026` : `${a.getDate()} ${MON[a.getMonth()]} – ${b.getDate()} ${MON[b.getMonth()]} 2026` };
+    const status = e => D(e.e) < TODAY ? 'done' : (D(e.s) <= TODAY && D(e.e) >= TODAY ? 'today' : 'up');
+    let filter = 'all', month = 9;
+
+    /* Highlights */
+    hl.innerHTML = E.filter(e => e.f).map((e, i) => {
+      const a = D(e.s); return `
+ <div class="hcard ${i === 0 ? 'big' : ''}" onclick="openM(${E.indexOf(e)})">
+  <img src="${e.img}" alt=""><div class="badge-date"><b>${a.getDate()}</b><small>${MON[a.getMonth()]}</small></div>
+  <div class="info"><span class="tag ${CAT[e.c].c}">${CAT[e.c].l}</span><h3>${e.t}</h3><p>${fmt(e)} · Pertamina Mandalika International Circuit</p><span class="fact">${e.fact}</span></div></div>`
+    }).join('');
+
+    /* Filters + legend */
+    filters.innerHTML = `<button class="chip on" data-f="all">Semua</button>` + Object.entries(CAT).map(([k, v]) => `<button class="chip" data-f="${k}"><i style="background:${v.col}"></i>${v.l}</button>`).join('');
+    legend.innerHTML = Object.values(CAT).map(v => `<span><i style="background:${v.col}"></i>${v.l}</span>`).join('');
+
+    function inMonth(e, m) { const a = D(e.s), b = D(e.e); return a.getMonth() <= m && b.getMonth() >= m }
+    function render() {
+      mlabel.textContent = `${MONF[month]} 2026`;
+      const L = E.filter(e => (filter === 'all' || e.c === filter) && inMonth(e, month)).sort((a, b) => D(a.s) - D(b.s));
+      count.textContent = L.length ? `${L.length} agenda di ${MONF[month]} 2026` : '';
+      /* list grouped per week */
+      let html = '', wk = -1;
+      L.forEach(e => {
+        const a = D(e.s), i = E.indexOf(e), st = status(e);
+        const start = a.getMonth() < month ? 1 : a.getDate(), w = Math.ceil(start / 7);
+        if (w !== wk) { wk = w; html += `<div class="week">Minggu ke-${w}</div>` }
+        html += `<div class="row ${st === 'done' ? 'past' : ''}" onclick="openM(${i})">
+   <div class="rd"><small>${DAY[a.getDay()]}</small><b>${a.getDate()}</b><em>${MON[a.getMonth()]}</em></div>
+   <div class="ri"><img src="${e.img}" alt="" loading="lazy"></div>
+   <div class="rt"><span class="tag ${CAT[e.c].c}">${CAT[e.c].l}</span>${st === 'done' ? '<span class="status s-done">SELESAI</span>' : st === 'today' ? '<span class="status s-today"><span class="live-dot"></span>HARI INI</span>' : ''}
+    <h3>${e.t}</h3><div class="meta"><span>📅 ${fmt(e)}</span>${e.time ? `<span>🕘 ${e.time}</span>` : ''}<span>📍 Pertamina Mandalika International Circuit</span></div></div>
+   <div class="go">→</div></div>`;
+      });
+      list.innerHTML = html || `<div style="background:#fff;border-radius:10px;padding:60px;text-align:center;color:#6C757D">
+   <b style="display:block;font-size:18px;color:#000;margin-bottom:6px">Belum ada agenda yang dipublikasikan</b>Ikuti media sosial MGPA untuk update jadwal terbaru.</div>`;
+      /* calendar */
+      const first = new Date(2026, month, 1), days = new Date(2026, month + 1, 0).getDate(), pad = first.getDay(), prevDays = new Date(2026, month, 0).getDate();
+      let g = DAY.map(d => `<div class="dh">${d}</div>`).join('');
+      for (let i = pad; i > 0; i--)g += `<div class="cell out"><span class="n">${prevDays - i + 1}</span></div>`;
+      for (let d = 1; d <= days; d++) {
+        const dt = new Date(2026, month, d), ev = L.filter(e => D(e.s) <= dt && D(e.e) >= dt);
+        const isT = dt.toDateString() === TODAY.toDateString();
+        g += `<div class="cell ${isT ? 'today' : ''}"><span class="n">${d}</span>${ev.slice(0, 3).map(e => `<div class="ev ${CAT[e.c].e}" title="${e.t}" onclick="openM(${E.indexOf(e)})">${e.t}</div>`).join('')}${ev.length > 3 ? `<div class="plus" onclick="openM(${E.indexOf(ev[3])})">+${ev.length - 3} lainnya</div>` : ''}</div>`;
+      }
+      const tail = (7 - (pad + days) % 7) % 7; for (let i = 1; i <= tail; i++)g += `<div class="cell out"><span class="n">${i}</span></div>`;
+      grid.innerHTML = g;
+    }
+    document.querySelectorAll('.chip').forEach(b => b.onclick = () => { document.querySelectorAll('.chip').forEach(x => x.classList.remove('on')); b.classList.add('on'); filter = b.dataset.f; render() });
+    prev.onclick = () => { if (month > 0) { month--; render() } }; next.onclick = () => { if (month < 11) { month++; render() } };
+    vList.onclick = () => { vList.classList.add('on'); vCal.classList.remove('on'); list.style.display = 'block'; cal.style.display = 'none' };
+    vCal.onclick = () => { vCal.classList.add('on'); vList.classList.remove('on'); list.style.display = 'none'; cal.style.display = 'block' };
+    function openM(i) {
+      const e = E[i]; mImg.src = e.img; mTag.className = 'tag ' + CAT[e.c].c; mTag.textContent = CAT[e.c].l; mTitle.textContent = e.t;
+      mMeta.innerHTML = `<span>📅 ${fmt(e)}</span>${e.time ? `<span>🕘 ${e.time}</span>` : ''}<span>📍 Pertamina Mandalika International Circuit</span>`;
+      mDesc.textContent = e.d; mCta.textContent = e.c === 'exp' || e.c === 'track' ? 'Book Now' : 'Detail Event'; modal.classList.add('show')
+    }
+    function closeM() { modal.classList.remove('show') }
+    modal.onclick = ev => { if (ev.target === modal) closeM() };
+    document.onkeydown = ev => { if (ev.key === 'Escape') closeM() };
+    render();
+  </script>
+</body>
+
+</html>
